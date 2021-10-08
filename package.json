@@ -3,7 +3,7 @@
     "nodemon": "^2.0.13",
     "prettier": "2.4.1"
   },
-  
+
   "scripts": {
     "start": "nodemon app.js"
   },
@@ -12,5 +12,4 @@
     "express": "^4.17.1"
     
   }
-  
 }
