@@ -4,6 +4,7 @@ const path = require("path");
 const ejs = require("ejs");
 const Photo = require("./models/Photo");
 const fileUpload = require("express-fileupload");
+const fs = require("fs");
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.use(fileUpload());
 
 //Routes
 app.get("/", async (req, res) => {
-  const photos = await Photo.find({});
+  const photos = await Photo.find({}).sort('-creationDate');
   res.render("index", {
     photos,
   });
@@ -39,8 +40,22 @@ app.get("/add", (req, res) => {
   res.render("add");
 });
 app.post("/photos", async (req, res) => {
-  await Photo.create(req.body);
-  res.redirect("/");
+
+  const uploadDir = "public/uploads";
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
+
+  let uploadedImage = req.files.image;
+  let uploadPath = __dirname + "/public/uploads/" + uploadedImage.name;
+
+  uploadedImage.mv(uploadPath, async () => {
+    await Photo.create({
+      ...req.body,
+      image: "/uploads/" + uploadedImage.name,
+    });
+    res.redirect("/");
+  });
 });
 
 const port = 3000;
