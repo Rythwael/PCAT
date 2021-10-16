@@ -22,7 +22,7 @@ app.use(fileUpload());
 
 //Routes
 app.get("/", async (req, res) => {
-  const photos = await Photo.find({}).sort('-creationDate');
+  const photos = await Photo.find({}).sort("-creationDate");
   res.render("index", {
     photos,
   });
@@ -40,7 +40,6 @@ app.get("/add", (req, res) => {
   res.render("add");
 });
 app.post("/photos", async (req, res) => {
-
   const uploadDir = "public/uploads";
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
@@ -55,6 +54,13 @@ app.post("/photos", async (req, res) => {
       image: "/uploads/" + uploadedImage.name,
     });
     res.redirect("/");
+  });
+});
+
+app.get("/photos/edit/:id", async (req, res) => {
+  const photo = await Photo.findOne({_id: req.params.id});
+  res.render("edit",{
+    photo
   });
 });
 
