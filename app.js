@@ -9,7 +9,7 @@ const pageController = require('./controllers/pagecontroller')
 const app = express();
 
 //connect DB
-mongoose.connect("mongodb://localhost/pcat-test-db");
+mongoose.connect("mongodb+srv://gylph:7fa137EF@cluster0.y0fuc.mongodb.net/gylph-pcat-db?retryWrites=true&w=majority");
 
 //Template Engine
 app.set("view engine", "ejs");
